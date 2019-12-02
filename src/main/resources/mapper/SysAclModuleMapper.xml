@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ylc.permission.mapper.SysAclModuleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ylc.permission.entity.SysAclModule">
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="parent_id" property="parentId" />
+        <result column="level" property="level" />
+        <result column="seq" property="seq" />
+        <result column="status" property="status" />
+        <result column="remark" property="remark" />
+        <result column="operator" property="operator" />
+        <result column="operate_time" property="operateTime" />
+        <result column="operate_ip" property="operateIp" />
+    </resultMap>
+    
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        name, parent_id, level, seq, status, remark, operator, operate_time, operate_ip
+    </sql>
+
+
+    <resultMap id="selectResultMap" type="com.ylc.permission.entity.SysAclModule">
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="parent_id" property="parentId" />
+        <result column="level" property="level" />
+        <result column="seq" property="seq" />
+        <result column="status" property="status" />
+        <result column="remark" property="remark" />
+        <result column="operator" property="operator" />
+        <result column="operate_time" property="operateTime" />
+        <result column="operate_ip" property="operateIp" />
+        <collection column="id" property="children" ofType="com.ylc.permission.entity.SysAclModule" javaType="java.util.ArrayList"
+                    select="getNextNodeMenu" />
+    </resultMap>
+
+    <!--递归查询子菜单-->
+    <select id="selectAllMenu" resultMap="selectResultMap">
+        SELECT <include refid="Base_Column_List" /> FROM sys_acl_module
+    </select>
+    <select id="getNextNodeMenu" resultMap="selectResultMap">
+        SELECT <include refid="Base_Column_List" /> FROM sys_acl_module
+        WHERE parent_id = #{id}
+
+    </select>
+</mapper>
