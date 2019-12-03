@@ -95,7 +95,7 @@
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
 
 
-            <li data-name="set" class="layui-nav-item" th:each="menu:${list}">
+            <!--<li data-name="set" class="layui-nav-item" th:each="menu:${list}">
               <a href="javascript:;" lay-tips="设置" lay-direction="2">
                 <i class="layui-icon layui-icon-set"></i>
                 <cite th:text="${menu.name}">name</cite>
@@ -110,7 +110,7 @@
                 </dd>
 
               </dl>
-            </li>
+            </li>-->
 
           </ul>
         </div>
@@ -170,13 +170,58 @@
               url: "/allMenu",
               dataType: 'json',
               success: function (data) {
-                console.info(JSON.stringify(data));
+              /*<li data-name="set" class="layui-nav-item" th:each="menu:${list}">
+                        <a href="javascript:;" lay-tips="设置" lay-direction="2">
+                        <i class="layui-icon layui-icon-set"></i>
+                        <cite th:text="${menu.name}">name</cite>
+                        </a>
+                        <dl class="layui-nav-child" th:each="children:${menu.children}">
+                        <dd class="layui-nav-itemed">
+                        <a href="javascript:;" th:text="${children.name}">name</a>
+                        <dl class="layui-nav-child" th:each="nextNode:${children.children}">
+                        <dd><a lay-href="set/system/website.html" th:text="${nextNode.name}">name</a></dd>
+
+                </dl>
+                </dd>
+
+                </dl>
+                </li>*/
+                var menu = "";
+                for(var i=0;i<data.length;i++){
+                  menu += "<li data-name='set' class='layui-nav-item' " +
+                          "<a href='javascript:;' lay-tips='设置' lay-direction='2'> <i class='layui-icon layui-icon-set'></i> " +
+                          "<cite >data[i].name</cite> </li> </a>";
+
+                  loadChildren(data[i].children);
+                  menu += "</li>";
+                }
+
+
+                $("#LAY-system-side-menu").append(menu);
 
               }
           });
 
 
   });
+
+  function loadChildren(childrenMenu) {
+    if (childrenMenu != '' && childrenMenu != null) {
+      for (var i = 0; i < childrenMenu.length; i++) {
+        if (i == 0) {
+          //节点
+          menu += "<dl class='layui-nav-child'> <dd class='layui-nav-itemed'>" +
+                  "<a href='javascript:;' >" + childrenMenu[i].name + "</a>"
+        } else {
+          menu += "<dl class='layui-nav-child' > " +
+                  "<dd><a lay-href='#'>" + childrenMenu[i].name + " /a></dd></dl>"
+        }
+        loadChildren(childrenMenu[i]);
+      }
+    }else{
+      menu += "</dl>";
+    }
+  }
 
   </script>
   
