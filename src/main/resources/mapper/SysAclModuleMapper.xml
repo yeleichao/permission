@@ -41,6 +41,7 @@
     <!--递归查询子菜单-->
     <select id="selectAllMenu" resultMap="selectResultMap">
         SELECT <include refid="Base_Column_List" /> FROM sys_acl_module
+        where parent_id= '0'
     </select>
     <select id="getNextNodeMenu" resultMap="selectResultMap">
         SELECT <include refid="Base_Column_List" /> FROM sys_acl_module

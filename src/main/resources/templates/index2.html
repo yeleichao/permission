@@ -1,5 +1,7 @@
+
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <head>
   <meta charset="utf-8">
   <title>layuiAdmin std - 通用后台管理模板系统（iframe标准版）</title>
@@ -25,19 +27,19 @@
               <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
             </a>
           </li>
-          <!--<li class="layui-nav-item layui-hide-xs" lay-unselect>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="http://www.layui.com/admin/" target="_blank" title="前台">
               <i class="layui-icon layui-icon-website"></i>
             </a>
-          </li>-->
+          </li>
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;" layadmin-event="refresh" title="刷新">
               <i class="layui-icon layui-icon-refresh-3"></i>
             </a>
           </li>
-          <!--<li class="layui-nav-item layui-hide-xs" lay-unselect>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" layadmin-event="serach" lay-action="template/search.html?keywords="> 
-          </li>-->
+          </li>
         </ul>
         <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
           
@@ -54,11 +56,11 @@
               <i class="layui-icon layui-icon-theme"></i>
             </a>
           </li>
-          <!--<li class="layui-nav-item layui-hide-xs" lay-unselect>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="note">
               <i class="layui-icon layui-icon-note"></i>
             </a>
-          </li>-->
+          </li>
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="fullscreen">
               <i class="layui-icon layui-icon-screen-full"></i>
@@ -76,41 +78,23 @@
             </dl>
           </li>
           
-          <!--<li class="layui-nav-item layui-hide-xs" lay-unselect>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
           </li>
           <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
             <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
-          </li>-->
+          </li>
         </ul>
       </div>
       
       <!-- 侧边菜单 -->
       <div class="layui-side layui-side-menu">
         <div class="layui-side-scroll">
-          <div class="layui-logo" lay-href="home/console.html">
+          <div class="layui-logo" lay-href="#">
             <span>layuiAdmin</span>
           </div>
           
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-
-
-            <!--<li data-name="set" class="layui-nav-item" th:each="menu:${list}">
-              <a href="javascript:;" lay-tips="设置" lay-direction="2">
-                <i class="layui-icon layui-icon-set"></i>
-                <cite th:text="${menu.name}">name</cite>
-              </a>
-              <dl class="layui-nav-child" th:each="children:${menu.children}">
-                <dd class="layui-nav-itemed">
-                  <a href="javascript:;" th:text="${children.name}">name</a>
-                  <dl class="layui-nav-child" th:each="nextNode:${children.children}">
-                    <dd><a lay-href="set/system/website.html" th:text="${nextNode.name}">name</a></dd>
-
-                  </dl>
-                </dd>
-
-              </dl>
-            </li>-->
 
           </ul>
         </div>
@@ -167,52 +151,57 @@
           ,form = layui.form
           ,$=layui.jquery;
 
-          $.ajax({
-              type: "post",
-              url: "/allMenu",
-              dataType: 'json',
-              success: function (data) {
-                for(var i=0;i<data.length;i++){
+      $.ajax({
+          type: "post",
+          url: "/allMenu",
+          dataType: 'json',
+          success: function (data) {
+              for(var i=0;i<data.length;i++){
                   menu += "<li class='layui-nav-item'> " +
-                            "<a href='javascript:;' lay-direction='2'>" +
-                              " <i class='layui-icon layui-icon-app'></i> " +
-                              "<cite >"+data[i].name+"</cite> " +
-                            "</a>";
+                      "<a href='javascript:;' lay-direction='2'>" +
+                      " <i class='layui-icon layui-icon-app'></i> " +
+                      "<cite >"+data[i].name+"</cite> " +
+                      "</a>";
 
                   loadChildren(data[i].children);
                   menu += "</li>";
-                }
-
-                console.info(menu);
-                $("#LAY-system-side-menu").append(menu);
-
               }
-          });
+
+              console.info(menu);
+              $("#LAY-system-side-menu").append(menu);
+              //hover显示效果
+              $(".layui-nav-bar").attr("class", "zorder:999;");
+              //重新渲染
+              layui.use('element', function() {
+                  var element = layui.element;
+                  element.init();
+              });
+          }
+      });
 
 
   });
 
   function loadChildren(childrenMenu) {
-    if (childrenMenu != '' && childrenMenu != null) {
-        menu += "<dl class='layui-nav-child'>";
-      for (var i = 0; i < childrenMenu.length; i++) {
-          //节点
-          menu += " <dd>" +
-                  "<a href='javascript:;' >" + childrenMenu[i].name + "</a>"
-          if(childrenMenu[i].children !=null && childrenMenu[i].children != ''){
-              loadChildren(childrenMenu[i].children);
-              menu += "</dd>";
-          }else{
-              menu += "</dd></dl>"
+      if (childrenMenu != '' && childrenMenu != null) {
+          menu += "<dl class='layui-nav-child'>";
+          for (var i = 0; i < childrenMenu.length; i++) {
+              //节点
+              menu += " <dd>" +
+                  "<a href='#' >" + childrenMenu[i].name + "</a>"
+              if(childrenMenu[i].children !=null && childrenMenu[i].children != ''){
+                  loadChildren(childrenMenu[i].children);
+                  menu += "</dd>";
+              }else{
+                  menu += "</dd></dl>"
+              }
+
           }
-
       }
-    }
   }
-
-  </script>
   
 
+  </script>
 </body>
 </html>
 

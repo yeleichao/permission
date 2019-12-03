@@ -34,6 +34,11 @@ public class TestController {
     public String index(){
         return "index";
     }
+    @RequestMapping("/index2")
+    public String index2(){
+        return "index2";
+    }
+
     @Autowired
     private ISysAclModuleService sysAclModuleService;
 
