@@ -199,7 +199,46 @@
           }
       }
   }
-  
+    function loadParents(data){
+		//先添加所有的主材单
+		$.each(data,function(i,obj){
+			//console.info("data->"+JSON.stringify(obj));
+			var content='<li class="layui-nav-item">';
+			content+='<a href="javascript:;">'+obj.name+'</a>';
+			//这里是添加所有的子菜单
+			content+=loadchild(obj);
+			content+='</li>';
+			console.info(content);
+		});
+	
+	}
+               
+ 
+        //组装子菜单的方法
+        function loadchild(obj){
+            if(obj==null){
+                return;
+            }
+ 
+            var content='';
+ 
+            if(obj.children!=null && obj.children.length>0){
+				content+='<dl class="layui-nav-child">';
+                $.each(obj.children,function(i,note){
+                    content+='<dd>';
+                    content+='<a href="javascript:;">'+note.name+'</a>';
+                    if(note.children==null){
+                        return;
+                    }
+                    content+=loadchild(note);
+                    content+='</dd>';
+                });
+ 
+                content+='</dl>';
+            }
+            
+            return content;
+        }
 
   </script>
 </body>
