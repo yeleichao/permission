@@ -163,7 +163,7 @@
                       "<cite >"+data[i].name+"</cite> " +
                       "</a>";
 
-                  loadChildren(data[i].children);
+                  menu += loadchild(data[i]);
                   menu += "</li>";
               }
 
@@ -178,27 +178,34 @@
               });
           }
       });
+      //组装子菜单的方法
+      function loadchild(obj){
+          if(obj==null){
+              return;
+          }
 
+          var content='';
+
+          if(obj.children!=null && obj.children.length>0){
+              content+='<dl class="layui-nav-child">';
+              $.each(obj.children,function(i,note){
+                  content+='<dd>';
+                  content+='<a href="javascript:;">'+note.name+'</a>';
+                  if(note.children==null){
+                      return;
+                  }
+                  content+=loadchild(note);
+                  content+='</dd>';
+              });
+
+              content+='</dl>';
+          }
+
+          return content;
+      }
 
   });
 
-  function loadChildren(childrenMenu) {
-      if (childrenMenu != '' && childrenMenu != null) {
-          menu += "<dl class='layui-nav-child'>";
-          for (var i = 0; i < childrenMenu.length; i++) {
-              //节点
-              menu += " <dd>" +
-                  "<a href='#' >" + childrenMenu[i].name + "</a>"
-              if(childrenMenu[i].children !=null && childrenMenu[i].children != ''){
-                  loadChildren(childrenMenu[i].children);
-                  menu += "</dd>";
-              }else{
-                  menu += "</dd></dl>"
-              }
-
-          }
-      }
-  }
     function loadParents(data){
 		//先添加所有的主材单
 		$.each(data,function(i,obj){
@@ -214,31 +221,7 @@
 	}
                
  
-        //组装子菜单的方法
-        function loadchild(obj){
-            if(obj==null){
-                return;
-            }
- 
-            var content='';
- 
-            if(obj.children!=null && obj.children.length>0){
-				content+='<dl class="layui-nav-child">';
-                $.each(obj.children,function(i,note){
-                    content+='<dd>';
-                    content+='<a href="javascript:;">'+note.name+'</a>';
-                    if(note.children==null){
-                        return;
-                    }
-                    content+=loadchild(note);
-                    content+='</dd>';
-                });
- 
-                content+='</dl>';
-            }
-            
-            return content;
-        }
+
 
   </script>
 </body>
