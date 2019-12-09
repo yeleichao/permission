@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ylc.permission.entity.SysDept">
     <result column="id" property="id" />
-        <result column="name" property="name" />
+        <result column="name" property="title" />
         <result column="parent_id" property="parentId" />
         <result column="level" property="level" />
         <result column="seq" property="seq" />
@@ -15,10 +15,36 @@
         <result column="operate_ip" property="operateIp" />
     </resultMap>
 
+
+    <resultMap id="SelectResultMap" type="com.ylc.permission.entity.SysDept">
+        <result column="id" property="id" />
+        <result column="name" property="title" />
+        <result column="parent_id" property="parentId" />
+        <result column="level" property="level" />
+        <result column="seq" property="seq" />
+        <result column="remark" property="remark" />
+        <result column="operator" property="operator" />
+        <result column="operate_time" property="operateTime" />
+        <result column="operate_ip" property="operateIp" />
+        <collection column="id" property="children" ofType="com.ylc.permission.entity.SysDept" javaType="java.util.List"
+                    select="selectChildrenDept">
+
+        </collection>
+
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id,
         name, parent_id, level, seq, remark, operator, operate_time, operate_ip
     </sql>
 
+    <select id="selectAllDept" resultMap="SelectResultMap">
+        SELECT  <include refid="Base_Column_List" /> FROM sys_dept
+        WHERE parent_id = '0'
+    </select>
+    <select id="selectChildrenDept" resultMap="SelectResultMap">
+        SELECT  <include refid="Base_Column_List" /> FROM sys_dept
+        WHERE parent_id = #{id}
+    </select>
 </mapper>

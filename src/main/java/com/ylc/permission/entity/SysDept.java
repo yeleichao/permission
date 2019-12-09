@@ -2,6 +2,7 @@ package com.ylc.permission.entity;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -30,7 +31,7 @@ public class SysDept implements Serializable {
     /**
      * 部门名称
      */
-    private String name;
+    private String title;
 
     /**
      * 上级部门id
@@ -66,6 +67,8 @@ public class SysDept implements Serializable {
      * 最后一次更新操作者的ip地址
      */
     private String operateIp;
+
+    private List<SysDept> children;
 
 
 }

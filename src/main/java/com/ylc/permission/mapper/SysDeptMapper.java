@@ -3,6 +3,8 @@ package com.ylc.permission.mapper;
 import com.ylc.permission.entity.SysDept;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SysDeptMapper extends BaseMapper<SysDept> {
 
+    List<SysDept> selectAllDept();
 }
